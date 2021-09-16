@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NZSBH.Application\NZSBH.Application.csproj" />
+    <ProjectReference Include="..\NZSBH.Contracts\NZSBH.Contracts.csproj" />
+    <ProjectReference Include="..\NZSBH.Models\NZSBH.Models.csproj" />
+    <ProjectReference Include="..\NZSBH.Repositories\NZSBH.Repositories.csproj" />
+  </ItemGroup>
+
+</Project>
