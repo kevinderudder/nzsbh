@@ -39,5 +39,17 @@ namespace NZSBH.Services
             return _dxos.MapBookDto(b);
             
         }
+
+        public async Task<bool> Delete(Guid bookId)
+        {
+            var book = await _repo.GetBookAsync(b => b.Id == bookId && b.IsDeleted == false);
+            if (book == null) throw new ApplicationException("Not foud");
+
+            book.Delete();
+
+            _repo.Update(book);
+            int i = await _repo.SaveChangesAsync();
+            return i > 0;
+        }
     }
 }

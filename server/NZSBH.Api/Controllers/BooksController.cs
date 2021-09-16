@@ -42,5 +42,26 @@ namespace NZSBH.Api.Controllers
         {
             return await _booksService.Add(b);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            try {
+                bool isDeleted = await _booksService.Delete(id);
+                if (isDeleted)
+                {
+                    return NoContent();
+                }
+                else {
+                    return StatusCode(500);
+                }
+            }
+            catch (ApplicationException ex)
+            {
+                return NotFound();
+            }
+            
+            
+        }
     }
 }

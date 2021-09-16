@@ -11,6 +11,7 @@ namespace NZSBH.Services
     public interface IBooksService
     {
         Task<BookDto> Add(BookDto newBook);
+        Task<bool> Delete(Guid bookId);
         Task<IEnumerable<BookDto>> GetAll();
     }
 }
