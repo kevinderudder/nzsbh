@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using NZSBH.Data;
+using NZSBH.Api.Extensions;
 
 namespace NZSBH.Api
 {
@@ -33,6 +34,7 @@ namespace NZSBH.Api
             });
             services.AddControllers();
             services.RegisterDependencies();
+            services.ConfigureAuthentication(Configuration);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "NZSBH.Api", Version = "v1" });
@@ -53,6 +55,7 @@ namespace NZSBH.Api
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

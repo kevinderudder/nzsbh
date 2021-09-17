@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using NZSBH.Application.Dxos;
+using NZSBH.Models.Entities;
 using NZSBH.Repositories;
 using NZSBH.Services;
 using System;
@@ -15,6 +16,7 @@ namespace NZSBH.Api
             services.AddTransient<IBooksService, BooksService>();
             services.AddTransient<IBooksDxos, BooksDxos>();
             services.AddTransient<IBooksRepository, BooksRepository>();
+            services.AddTransient<IRepository<Book>, Repository<Book>>();
         }
     }
 }

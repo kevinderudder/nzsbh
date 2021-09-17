@@ -17,5 +17,13 @@ namespace NZSBH.Models.Entities
 
         public Guid? BookCategoryId { get; set; }
         public BookCategory BookCategory { get; set; }
+
+        public void Update(string title, string isbn, bool isHardCover, Guid? publisherId, Guid? bookCategoryId) {
+            this.Title = title;
+            this.Isbn = isbn;
+            this.IsHardCover = IsHardCover;
+            this.PublisherId = publisherId;
+            this.BookCategoryId = bookCategoryId;
+        }
     }
 }

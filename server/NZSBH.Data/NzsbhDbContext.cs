@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NZSBH.Models.Entities;
 using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace NZSBH.Data
 {
@@ -15,6 +17,18 @@ namespace NZSBH.Data
             : base(options)
         {
 
+        }
+
+        public override int SaveChanges()
+        {
+            this.AddAuditInfo();
+            return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            this.AddAuditInfo();
+            return base.SaveChangesAsync(cancellationToken);
         }
     }
 }

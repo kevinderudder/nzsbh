@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NZSBH.Application.Dxos;
 using NZSBH.Contracts.Dtos;
@@ -13,6 +14,7 @@ namespace NZSBH.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class BooksController : ControllerBase
     {
         private readonly IBooksService _booksService;
@@ -38,10 +40,19 @@ namespace NZSBH.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<BookDto> Post(BookDto b)
+        public async Task<IActionResult> Post(BookDto b)
         {
-            return await _booksService.Add(b);
+            var bto = await _booksService.Add(b);
+            return CreatedAtAction("post", bto);
         }
+
+        [HttpPut]
+        public async Task<IActionResult> Put(BookDto b)
+        {
+            var bto = await _booksService.Update(b);
+            return Ok(bto);
+        }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(Guid id)
