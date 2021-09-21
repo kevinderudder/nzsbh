@@ -21,7 +21,7 @@ namespace NZSBH.Api.Controllers
             var publishers = new List<Publisher>() {
                 new Publisher(){ 
                     Id = Guid.NewGuid(),
-                    Title ="Het ei van columbus"
+                    Title ="Het ei van jens"
                 }
             };
             return Ok(publishers);
