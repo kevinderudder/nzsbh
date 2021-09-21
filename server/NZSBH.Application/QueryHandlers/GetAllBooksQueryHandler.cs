@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Caching.Memory;
 using NZSBH.Application.Dxos;
 using NZSBH.Contracts.Dtos;
 using NZSBH.Contracts.Queries;
@@ -15,19 +16,27 @@ namespace NZSBH.Application.QueryHandlers
 {
     public class GetAllBooksQueryHandler : IRequestHandler<GetAllBooksQuery, IEnumerable<BookDto>>
     {
-        private readonly IRepository<Book> _repo;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IBooksDxos _dxos;
+        private readonly IMemoryCache _memoryCache;
 
-        public GetAllBooksQueryHandler(IRepository<Book> repo, IBooksDxos dxos)
+        public GetAllBooksQueryHandler(IUnitOfWork uow, IBooksDxos dxos, IMemoryCache memoryCache)
         {
-            _repo = repo;
+            _unitOfWork = uow;
             _dxos = dxos;
+            _memoryCache = memoryCache;
         }
 
         public async Task<IEnumerable<BookDto>> Handle(GetAllBooksQuery request, CancellationToken cancellationToken)
         {
-            var data = await _repo.GetListAsync(b => b.IsDeleted == false);
-            return _dxos.MapBookDtos(data);
+            var cacheEntry = _memoryCache.GetOrCreateAsync("books", async entry => {
+                entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10);
+                var data = await _unitOfWork.BooksRepository.GetListAsync(b => b.IsDeleted == false);
+                var dxos = _dxos.MapBookDtos(data);
+                return dxos;
+            });
+
+            return await cacheEntry;
         }
     }
 }

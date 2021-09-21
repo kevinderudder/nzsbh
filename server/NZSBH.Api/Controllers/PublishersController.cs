@@ -16,6 +16,7 @@ namespace NZSBH.Api.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<Publisher>), 200)]
         [ProducesResponseType(404)]
+        [ResponseCache(Duration = 120)]
         public IActionResult Get() {
             var publishers = new List<Publisher>() {
                 new Publisher(){ 

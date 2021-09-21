@@ -41,6 +41,9 @@ namespace NZSBH.Api
 
             services.AddMvc().AddFluentValidation(fv => fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false);
 
+            services.AddMemoryCache();
+            services.AddResponseCaching();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "NZSBH.Api", Version = "v1" });

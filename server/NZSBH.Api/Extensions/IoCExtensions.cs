@@ -16,6 +16,8 @@ namespace NZSBH.Api
             services.AddTransient<IBooksService, BooksService>();
             services.AddTransient<IBooksRepository, BooksRepository>();
             services.AddTransient<IRepository<Book>, Repository<Book>>();
+
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
         }
     }
 }
