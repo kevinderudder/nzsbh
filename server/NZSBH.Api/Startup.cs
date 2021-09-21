@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using NZSBH.Data;
 using NZSBH.Api.Extensions;
+using NZSBH.Application.Extensions;
+using FluentValidation.AspNetCore;
 
 namespace NZSBH.Api
 {
@@ -33,8 +35,12 @@ namespace NZSBH.Api
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), sqloptions => { });
             });
             services.AddControllers();
+            services.RegisterApplication();
             services.RegisterDependencies();
             services.ConfigureAuthentication(Configuration);
+
+            services.AddMvc().AddFluentValidation(fv => fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false);
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "NZSBH.Api", Version = "v1" });

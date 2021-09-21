@@ -1,8 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NZSBH.Application.Dxos;
+using NZSBH.Contracts.Commands;
 using NZSBH.Contracts.Dtos;
+using NZSBH.Contracts.Queries;
 using NZSBH.Models.Entities;
 using NZSBH.Services;
 using System;
@@ -14,20 +17,41 @@ namespace NZSBH.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
-    public class BooksController : ControllerBase
+    //[Authorize]
+    public class BooksController : ApiControllerBase
     {
         private readonly IBooksService _booksService;
         private readonly IBooksDxos _booksDxos;
 
-        public BooksController(IBooksService booksService, IBooksDxos booksDxos)
+        public BooksController(IMediator mediator)
+            :base(mediator)
         {
-            _booksService = booksService;
-            _booksDxos = booksDxos;
+            
         }
 
         [HttpGet]
+        public async Task<IActionResult> Get() {
+            return await ExecuteRequest(new GetAllBooksQuery());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post(AddBookCommand cmd)
+        {
+            if (cmd == null) return BadRequest();
+            return await ExecuteRequest(cmd);
+        }
+
+        /*
+        [HttpGet]
         public async Task<IActionResult> Get()
+        {
+            var books = await _booksService.GetAll();
+            return Ok(books);
+        }
+
+
+        [HttpGet("categories")]
+        public async Task<IActionResult> GetCategories()
         {
             var books = await _booksService.GetAll();
             return Ok(books);
@@ -42,8 +66,34 @@ namespace NZSBH.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(BookDto b)
         {
-            var bto = await _booksService.Add(b);
-            return CreatedAtAction("post", bto);
+            try{
+                var bto = await _booksService.Add(b);
+                return CreatedAtAction("post", bto);
+            }
+            catch (ValidationException vex)
+            {
+                return StatusCodeAndMessage(HttpStatusCode.BadRequest, vex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCodeAndMessage(HttpStatusCode.InternalServerError, ex.Message);
+            }
+
+
+          try
+            {
+                var result = await _mediator.Send(request);
+                return Ok(result);
+            }
+            catch (ValidationException vex)
+            {
+                return StatusCodeAndMessage(HttpStatusCode.BadRequest, vex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCodeAndMessage(HttpStatusCode.InternalServerError, ex.Message);
+            }
+
         }
 
         [HttpPut]
@@ -74,5 +124,7 @@ namespace NZSBH.Api.Controllers
             
             
         }
+
+        */
     }
 }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace NZSBH.Repositories
 {
-    public class Repository<T> : IRepository<T> where T : BaseEntity
+    public sealed class Repository<T> : IRepository<T> where T : BaseEntity
     {
         private readonly NzsbhDbContext _dbContext;
         private readonly DbSet<T> _modelDbSets;

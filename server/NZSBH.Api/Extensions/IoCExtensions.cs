@@ -14,7 +14,6 @@ namespace NZSBH.Api
     {
         public static void RegisterDependencies(this IServiceCollection services) {
             services.AddTransient<IBooksService, BooksService>();
-            services.AddTransient<IBooksDxos, BooksDxos>();
             services.AddTransient<IBooksRepository, BooksRepository>();
             services.AddTransient<IRepository<Book>, Repository<Book>>();
         }
